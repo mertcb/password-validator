@@ -13,8 +13,10 @@ public class PasswordValidatorShould {
 
     private PasswordValidator validator;
 
-    @BeforeEach
-    void setUp() {
+    @ParameterizedTest
+    @MethodSource(value = "inputsForFirstValidator")
+    void validateFirstValidator(String password, boolean expected) {
+        // given
         PasswordValidatorBuilder builder = new PasswordValidatorBuilder();
         builder.setCharacterLimit(8);
         builder.setContainsUppercase();
@@ -22,12 +24,6 @@ public class PasswordValidatorShould {
         builder.setContainsUnderscore();
         builder.setContainsNumber();
         validator = builder.buildValidator();
-    }
-
-    @ParameterizedTest
-    @MethodSource(value = "inputs")
-    void validate(String password, boolean expected) {
-        // given
 
         // when
         boolean result = validator.validate(password);
@@ -36,7 +32,7 @@ public class PasswordValidatorShould {
         assertEquals(expected, result);
     }
 
-    private static Stream<Arguments> inputs() {
+    private static Stream<Arguments> inputsForFirstValidator() {
         return Stream.of(
             Arguments.of("1234567", false),
             Arguments.of("123456789g", false),
@@ -44,6 +40,62 @@ public class PasswordValidatorShould {
             Arguments.of("ASDqweRTe", false),
             Arguments.of("ASDqweRTe1", false),
             Arguments.of("_23ASDq_weRTe1", true)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource(value = "inputsForSecondValidator")
+    void validateSecondValidator(String password, boolean expected) {
+        // given
+        PasswordValidatorBuilder builder = new PasswordValidatorBuilder();
+        builder.setCharacterLimit(6);
+        builder.setContainsUppercase();
+        builder.setContainsLowercase();
+        builder.setContainsNumber();
+        validator = builder.buildValidator();
+
+        // when
+        boolean result = validator.validate(password);
+
+        // then
+        assertEquals(expected, result);
+    }
+
+    private static Stream<Arguments> inputsForSecondValidator() {
+        return Stream.of(
+            Arguments.of("12345", false),
+            Arguments.of("123456789g", false),
+            Arguments.of("123456789G", false),
+            Arguments.of("ASDqweRTe1", true),
+            Arguments.of("_23ASDq_weRTe1", true)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource(value = "inputsForThirdValidator")
+    void validateThirddValidator(String password, boolean expected) {
+        // given
+        PasswordValidatorBuilder builder = new PasswordValidatorBuilder();
+        builder.setCharacterLimit(16);
+        builder.setContainsUppercase();
+        builder.setContainsLowercase();
+        builder.setContainsUnderscore();
+        validator = builder.buildValidator();
+
+        // when
+        boolean result = validator.validate(password);
+
+        // then
+        assertEquals(expected, result);
+    }
+
+    private static Stream<Arguments> inputsForThirdValidator() {
+        return Stream.of(
+            Arguments.of("1234567891234", false),
+            Arguments.of("123456789ggggggggg", false),
+            Arguments.of("123456789GGGGGGGGG", false),
+            Arguments.of("ASDqweRTe______GDFSFS__", true),
+            Arguments.of("_23ASDq_weRTe1+___SDSADasdasd", true)
         );
     }
 }
