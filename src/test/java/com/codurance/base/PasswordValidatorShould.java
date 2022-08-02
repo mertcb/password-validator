@@ -15,7 +15,13 @@ public class PasswordValidatorShould {
 
     @BeforeEach
     void setUp() {
-        validator = new PasswordValidator();
+        PasswordValidatorBuilder builder = new PasswordValidatorBuilder();
+        builder.setCharacterLimit(8);
+        builder.setContainsUppercase();
+        builder.setContainsLowercase();
+        builder.setContainsUnderscore();
+        builder.setContainsNumber();
+        validator = builder.buildValidator();
     }
 
     @ParameterizedTest

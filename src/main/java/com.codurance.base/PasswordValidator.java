@@ -1,32 +1,48 @@
 package com.codurance.base;
 
 public class PasswordValidator {
+    private int characterLimit;
+
+    private boolean containsUppercase;
+    private boolean containsLowercase;
+    private boolean containsUnderscore;
+    private boolean containsNumber;
+
+    public PasswordValidator(int characterLimit, boolean containsUppercase, boolean containsLowercase, boolean containsUnderscore, boolean containsNumber) {
+        this.characterLimit = characterLimit;
+        this.containsUppercase = containsUppercase;
+        this.containsLowercase = containsLowercase;
+        this.containsUnderscore = containsUnderscore;
+        this.containsNumber = containsNumber;
+    }
+
+
     public boolean validate(String password) {
-        if(!isLongerThanEightCharacters(password)){
+        if(!isLongerThanCharacterLimit(password)){
             return false;
         }
 
-        if(!isContainUppercase(password)){
+        if(containsUppercase && !isContainUppercase(password)){
             return false;
         }
 
-        if(!isContainLowercase(password)){
+        if(containsLowercase && !isContainLowercase(password)){
             return false;
         }
 
-        if(!isContainsDigit(password)){
+        if(containsNumber && !isContainsDigit(password)){
             return false;
         }
 
-        if(!isContainsUnderscore(password)){
+        if(containsUnderscore && !isContainsUnderscore(password)){
             return false;
         }
 
         return true;
     }
 
-    private boolean isLongerThanEightCharacters(String password){
-        return password.length()>8;
+    private boolean isLongerThanCharacterLimit(String password){
+        return password.length()>this.characterLimit;
     }
 
     private boolean isContainUppercase(String password){
