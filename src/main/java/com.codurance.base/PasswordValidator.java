@@ -11,12 +11,15 @@ public class PasswordValidator {
     private boolean containsUnderscore;
     private boolean containsNumber;
 
-    public PasswordValidator(int characterLimit, boolean containsUppercase, boolean containsLowercase, boolean containsUnderscore, boolean containsNumber) {
+    private boolean allowFail;
+
+    public PasswordValidator(int characterLimit, boolean containsUppercase, boolean containsLowercase, boolean containsUnderscore, boolean containsNumber, boolean allowFail) {
         this.characterLimit = characterLimit;
         this.containsUppercase = containsUppercase;
         this.containsLowercase = containsLowercase;
         this.containsUnderscore = containsUnderscore;
         this.containsNumber = containsNumber;
+        this.allowFail = allowFail;
     }
 
     public ValidationResult validate(String password) {
@@ -41,7 +44,7 @@ public class PasswordValidator {
             errorMessages.add("Password must contain underscore.");
         }
 
-        return new ValidationResult(errorMessages);
+        return new ValidationResult(errorMessages, this.allowFail);
     }
 
     private boolean isLongerThanCharacterLimit(String password){

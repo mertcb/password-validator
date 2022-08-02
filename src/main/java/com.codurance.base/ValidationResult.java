@@ -7,10 +7,15 @@ public class ValidationResult {
     private boolean isValid = true;
     private List<String> errorMessages;
 
-    public ValidationResult(List<String> errorMessages) {
-        if(errorMessages.size()>0){
+    public ValidationResult(List<String> errorMessages, boolean allowFail) {
+        if(!allowFail && errorMessages.size()>0){
             this.isValid = false;
         }
+
+        if(allowFail && errorMessages.size()>1){
+            this.isValid = false;
+        }
+
         this.errorMessages = errorMessages;
     }
 

@@ -47,6 +47,15 @@ public class PasswordValidatorShould {
         thirdBuilder.setContainsUnderscore();
         PasswordValidator thirdValidator = thirdBuilder.buildValidator();
 
+        PasswordValidatorBuilder fourthBuilder = new PasswordValidatorBuilder();
+        fourthBuilder.setCharacterLimit(16);
+        fourthBuilder.setContainsUppercase();
+        fourthBuilder.setContainsLowercase();
+        fourthBuilder.setContainsUnderscore();
+        fourthBuilder.setAllowFail();
+
+        PasswordValidator fourthValidator = fourthBuilder.buildValidator();
+
         return Stream.of(
             Arguments.of(firstValidator, "1234567", false, List.of("Password is shorter than expected limit.", "Password must contain uppercase character.", "Password must contain lowercase character.", "Password must contain underscore.")),
             Arguments.of(firstValidator, "123456789g", false, List.of("Password must contain uppercase character.", "Password must contain underscore.")),
@@ -63,7 +72,9 @@ public class PasswordValidatorShould {
             Arguments.of(thirdValidator, "123456789ggggggggg", false, List.of("Password must contain uppercase character.", "Password must contain underscore.")),
             Arguments.of(thirdValidator, "123456789GGGGGGGGG", false, List.of("Password must contain lowercase character.", "Password must contain underscore.")),
             Arguments.of(thirdValidator, "ASDqweRTe______GDFSFS__", true, List.of()),
-            Arguments.of(thirdValidator, "_23ASDq_weRTe1+___SDSADasdasd", true, List.of())
+            Arguments.of(thirdValidator, "_23ASDq_weRTe1+___SDSADasdasd", true, List.of()),
+            Arguments.of(fourthValidator, "ASDqweRTe____", true, List.of("Password is shorter than expected limit.")),
+            Arguments.of(fourthValidator, "ASDRT____", false, List.of("Password is shorter than expected limit.","Password must contain lowercase character."))
         );
     }
 }
