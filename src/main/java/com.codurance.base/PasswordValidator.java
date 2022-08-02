@@ -14,17 +14,34 @@ public class PasswordValidator {
             return false;
         }
 
+        if(!isContainsDigit(password)){
+            return false;
+        }
+
+        if(!isContainsUnderscore(password)){
+            return false;
+        }
+
         return true;
     }
 
     private boolean isLongerThanEightCharacters(String password){
         return password.length()>8;
     }
+
     private boolean isContainUppercase(String password){
-        return !password.matches(".*[A-Z].*");
+        return password.matches(".*[A-Z].*");
     }
 
     private boolean isContainLowercase(String password){
-        return !password.matches(".*[a-z].*");
+        return password.matches(".*[a-z].*");
+    }
+
+    private boolean isContainsDigit(String password){
+        return password.matches(".*[0-9].*");
+    }
+
+    private boolean isContainsUnderscore(String password){
+        return password.matches(".*[_].*");
     }
 }

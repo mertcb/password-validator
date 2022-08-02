@@ -1,33 +1,43 @@
 package com.codurance.base;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class PasswordValidatorShould {
 
-    @Test
-    void notValidateWhenLessThan8Characters() {
-        PasswordValidator validator = new PasswordValidator();
-        String password = "1234567";
-        boolean result = validator.validate(password);
-        assertFalse(result);
+    private PasswordValidator validator;
+
+    @BeforeEach
+    void setUp() {
+        validator = new PasswordValidator();
     }
 
-    @Test
-    void notValidateWhenPasswordHasCapitalCharacter() {
-        PasswordValidator validator = new PasswordValidator();
-        String password = "123456789g";
+    @ParameterizedTest
+    @MethodSource(value = "inputs")
+    void validate(String password, boolean expected) {
+        // given
+
+        // when
         boolean result = validator.validate(password);
-        assertFalse(result);
+
+        // then
+        assertEquals(expected, result);
     }
 
-    @Test
-    void notValidateWhenPasswordHasNotAnyLowercaseLetter() {
-        PasswordValidator validator = new PasswordValidator();
-        String password = "123456789Gg";
-        boolean result = validator.validate(password);
-        assertFalse(result);
+    private static Stream<Arguments> inputs() {
+        return Stream.of(
+            Arguments.of("1234567", false),
+            Arguments.of("123456789g", false),
+            Arguments.of("123456789G", false),
+            Arguments.of("ASDqweRTe", false),
+            Arguments.of("ASDqweRTe1", false),
+            Arguments.of("_23ASDq_weRTe1", true)
+        );
     }
 }
