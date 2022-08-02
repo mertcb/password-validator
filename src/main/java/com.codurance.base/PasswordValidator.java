@@ -1,5 +1,8 @@
 package com.codurance.base;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PasswordValidator {
     private int characterLimit;
 
@@ -17,28 +20,29 @@ public class PasswordValidator {
     }
 
 
-    public boolean validate(String password) {
+    public ValidationResult validate(String password) {
+        List<String> errorMessages = new ArrayList<String>(List.of());
         if(!isLongerThanCharacterLimit(password)){
-            return false;
+            errorMessages.add("Password is shorter than expected limit.");
         }
 
         if(containsUppercase && !isContainUppercase(password)){
-            return false;
+            errorMessages.add("Password must contain uppercase character.");
         }
 
         if(containsLowercase && !isContainLowercase(password)){
-            return false;
+            errorMessages.add("Password must contain lowercase character.");
         }
 
         if(containsNumber && !isContainsDigit(password)){
-            return false;
+            errorMessages.add("Password must contain number.");
         }
 
         if(containsUnderscore && !isContainsUnderscore(password)){
-            return false;
+            errorMessages.add("Password must contain underscore.");
         }
 
-        return true;
+        return new ValidationResult(errorMessages);
     }
 
     private boolean isLongerThanCharacterLimit(String password){

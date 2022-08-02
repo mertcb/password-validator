@@ -26,10 +26,10 @@ public class PasswordValidatorShould {
         validator = builder.buildValidator();
 
         // when
-        boolean result = validator.validate(password);
+        ValidationResult result = validator.validate(password);
 
         // then
-        assertEquals(expected, result);
+        assertEquals(expected, result.isValid());
     }
 
     private static Stream<Arguments> inputsForFirstValidator() {
@@ -55,10 +55,10 @@ public class PasswordValidatorShould {
         validator = builder.buildValidator();
 
         // when
-        boolean result = validator.validate(password);
+        ValidationResult result = validator.validate(password);
 
         // then
-        assertEquals(expected, result);
+        assertEquals(expected, result.isValid());
     }
 
     private static Stream<Arguments> inputsForSecondValidator() {
@@ -73,7 +73,7 @@ public class PasswordValidatorShould {
 
     @ParameterizedTest
     @MethodSource(value = "inputsForThirdValidator")
-    void validateThirddValidator(String password, boolean expected) {
+    void validateThirdValidator(String password, boolean expected) {
         // given
         PasswordValidatorBuilder builder = new PasswordValidatorBuilder();
         builder.setCharacterLimit(16);
@@ -83,10 +83,10 @@ public class PasswordValidatorShould {
         validator = builder.buildValidator();
 
         // when
-        boolean result = validator.validate(password);
+        ValidationResult result = validator.validate(password);
 
         // then
-        assertEquals(expected, result);
+        assertEquals(expected, result.isValid());
     }
 
     private static Stream<Arguments> inputsForThirdValidator() {
