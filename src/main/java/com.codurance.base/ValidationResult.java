@@ -17,4 +17,8 @@ public class ValidationResult {
     public boolean isValid() {
         return isValid;
     }
+
+    public List<String> getErrorMessages() {
+        return errorMessages;
+    }
 }

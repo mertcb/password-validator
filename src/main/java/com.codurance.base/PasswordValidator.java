@@ -19,7 +19,6 @@ public class PasswordValidator {
         this.containsNumber = containsNumber;
     }
 
-
     public ValidationResult validate(String password) {
         List<String> errorMessages = new ArrayList<String>(List.of());
         if(!isLongerThanCharacterLimit(password)){
